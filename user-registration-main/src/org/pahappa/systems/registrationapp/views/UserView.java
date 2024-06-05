@@ -1,15 +1,16 @@
 package org.pahappa.systems.registrationapp.views;
+import  org.pahappa.systems.registrationapp.services.UserService;
 
+import java.lang.reflect.Method;
 import java.util.Scanner;
 
 public class UserView {
-
+    UserService user_service = new UserService();
     private final Scanner scanner;
 
     public UserView(){
         this.scanner = new Scanner(System.in);
     }
-
 
     public void displayMenu() {
         System.out.println("********* User Registration System *********");
@@ -29,22 +30,38 @@ public class UserView {
                 scanner.nextLine(); // Consume the newline character
                 switch (choice) {
                     case 1:
-                        registerUser();
+                        Method m = UserService.class.getDeclaredMethod("registerUser");
+                        m.setAccessible(true);
+                        m.invoke(user_service);
                         break;
                     case 2:
-                        displayAllUsers();
+                        Method m1 = UserService.class.getDeclaredMethod("displayAllUsers");
+                        m1.setAccessible(true);
+                        m1.invoke(user_service);
                         break;
                     case 3:
-                        getUserOfUsername();
+                        //getUserOfUsername();
+                        Method m2 = UserService.class.getDeclaredMethod("getUserOfUsername");
+                        m2.setAccessible(true);
+                        m2.invoke(user_service);
                         break;
                     case 4:
-                        updateUserOfUsername();
+                        //updateUserOfUsername();
+                        Method m3 = UserService.class.getDeclaredMethod("updateUserOfUsername");
+                        m3.setAccessible(true);
+                        m3.invoke(user_service);
                         break;
                     case 5:
-                        deleteUserOfUsername();
+                       // deleteUserOfUsername();
+                        Method m4 = UserService.class.getDeclaredMethod("deleteUserOfUsername");
+                        m4.setAccessible(true);
+                        m4.invoke(user_service);
                         break;
                     case 6:
-                        deleteAllUsers();
+                        //deleteAllUsers();
+                        Method m5 = UserService.class.getDeclaredMethod("displayAllUsers");
+                        m5.setAccessible(true);
+                        m5.invoke(user_service);
                         break;
                     case 7:
                         running = false;
@@ -59,21 +76,5 @@ public class UserView {
         }
     }
 
-    private void registerUser() {
-    }
 
-    private void displayAllUsers() {
-    }
-
-    private void getUserOfUsername() {
-    }
-
-    private void updateUserOfUsername() {
-    }
-
-    private void deleteUserOfUsername() {
-    }
-
-    private void deleteAllUsers() {
-    }
 }
