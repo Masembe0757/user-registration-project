@@ -1,9 +1,12 @@
 package org.pahappa.systems.registrationapp.models;
+import  java.util.*;
 
 import java.util.Date;
 import java.util.Objects;
 
 public class User {
+
+    public static final List<User> usrnam = new ArrayList<>();
 
     private String username;
     private String firstname;
