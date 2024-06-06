@@ -78,10 +78,15 @@ public class UserView {
 
         System.out.println("Enter users date of birth format mm/dd/yyyy ");
         String date_of_birth = scanner.nextLine();
-        DateFormat df = new SimpleDateFormat("mm/dd/yyyy");
-        Date date_of_birt = df.parse(date_of_birth);
+        if(date_of_birth.isEmpty()){
+            System.out.println("Seems you are missing the date of birth field, please fill all fields correctly");
+        }
+        else {
+            DateFormat df = new SimpleDateFormat("mm/dd/yyyy");
+            Date date_of_birt = df.parse(date_of_birth);
 
-        user_service.addUser(first_name, last_name, user_name, date_of_birt);
+            user_service.addUser(first_name, last_name, user_name, date_of_birt);
+        }
     }
 
     private void displayAllUsers() {

@@ -11,26 +11,36 @@ public class UserService {
     Scanner scn = new Scanner(System.in);
     User newUser = new User();
    public void addUser(String first_name, String last_name, String user_name, Date date_of_birth){
-       newUser.setFirstname(first_name);
-       newUser.setLastname(last_name);
-       newUser.setUsername(user_name);
-       newUser.setDateOfBirth(date_of_birth);
+       boolean missing_field = false;
 
-       boolean user_present = false;
-       for(User x : User.usrnam){
-           if(x.equals(newUser)){
-               user_present = true;
-           }else{
-
-               user_present= false;
-           }
+       if(first_name.isEmpty()){
+           System.out.println("Seems you are missing the first name field, please fill all fields correctly");
        }
-       if(user_present){
-           System.out.println("User already exists in data base ");
+       else if(last_name.isEmpty()){
+           System.out.println("Seems you are missing the last name field, please fill all fields correctly");
+       } else if (user_name.isEmpty()) {
+           System.out.println("Seems you are missing the user name field, please fill all fields correctly");
        }
        else {
-           User.usrnam.add(newUser);
-           System.out.println("User has been registered");
+
+           newUser.setFirstname(first_name);
+           newUser.setLastname(last_name);
+           newUser.setUsername(user_name);
+           newUser.setDateOfBirth(date_of_birth);
+
+           boolean user_present = false;
+
+
+           for (User x : User.usrnam) {
+               user_present = x.equals(newUser);
+           }
+           if (user_present) {
+               System.out.println("User already exists in data base ");
+           } else {
+               User.usrnam.add(newUser);
+               System.out.println("User has been registered");
+
+           }
        }
 
    }
