@@ -1,5 +1,5 @@
-package org.pahappa.systems.registrationapp.com.sendi.views;
-import org.pahappa.systems.registrationapp.com.sendi.services.UserService;
+package org.pahappa.systems.registrationapp.views;
+import org.pahappa.systems.registrationapp.services.UserService;
 
 import java.text.DateFormat;
 import java.text.ParseException;

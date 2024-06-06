@@ -1,11 +1,11 @@
-package org.pahappa.systems.registrationapp.com.sendi.services;
+package org.pahappa.systems.registrationapp.services;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
-import org.pahappa.systems.registrationapp.com.sendi.models.User;
+import org.pahappa.systems.registrationapp.models.User;
 
 public class UserService {
     Scanner scn = new Scanner(System.in);

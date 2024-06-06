@@ -1,6 +1,6 @@
 package org.pahappa.systems.registrationapp;
 
-import org.pahappa.systems.registrationapp.com.sendi.views.UserView;
+import org.pahappa.systems.registrationapp.views.UserView;
 
 public class RegistrationApp {
 
