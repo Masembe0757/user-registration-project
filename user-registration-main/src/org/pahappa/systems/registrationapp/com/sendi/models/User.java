@@ -1,4 +1,4 @@
-package org.pahappa.systems.registrationapp.models;
+package org.pahappa.systems.registrationapp.com.sendi.models;
 import  java.util.*;
 
 import java.util.Date;

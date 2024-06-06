@@ -1,9 +1,6 @@
-package org.pahappa.systems.registrationapp.views;
-import org.pahappa.systems.registrationapp.models.User;
-import  org.pahappa.systems.registrationapp.services.UserService;
+package org.pahappa.systems.registrationapp.com.sendi.views;
+import org.pahappa.systems.registrationapp.com.sendi.services.UserService;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
