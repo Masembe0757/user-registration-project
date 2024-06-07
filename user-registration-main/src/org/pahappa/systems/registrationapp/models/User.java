@@ -77,5 +77,4 @@ public class User {
         return Objects.hash(username, firstname, lastname, dateOfBirth);
     }
 
-
 }

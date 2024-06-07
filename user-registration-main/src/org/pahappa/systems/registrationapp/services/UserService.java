@@ -40,23 +40,29 @@ public class UserService {
                 newUser.setLastname(last_name);
                 newUser.setUsername(user_name);
 
-                boolean user_present = false;
+                boolean user_name_present = false;
 
 
                 for (User x : users_list) {
                     if(x.getUsername().equals(user_name)){
-                        user_present = true;
+                        user_name_present = true;
                     }
                     else {
-                        user_present =false;
+                        user_name_present =false;
                     }
                 }
-                if (user_present) {
+                if (user_name_present) {
                     System.out.println("User name already taken please enter new user name below : ");
                     addUser(first_name,last_name, scn.nextLine(), date_of_birth);
                 } else {
-                    users_list.add(newUser);
-                    System.out.println("User has been registered successfully (*_*) ");
+                    boolean user_present =false;
+                    if(user_present){
+                        System.out.println("User already exists in the system");
+                    }
+                    else {
+                        users_list.add(newUser);
+                        System.out.println("User has been registered successfully (*_*) ");
+                    }
 
                 }
 
@@ -70,8 +76,9 @@ public class UserService {
 
    }
    public void  returnAllUsers(){
-       System.out.println("System has registered the following users");
+
        if(!users_list.isEmpty()) {
+           System.out.println("System has registered the following users");
            for (User x : users_list) {
 
                System.out.println(" User " + x.getUsername() + " has names " + x.getFirstname() + " " + x.getLastname() + " and has a date of birth  of " + x.getDateOfBirth());
@@ -149,7 +156,5 @@ public class UserService {
        }
    }
 
-    public static  void main(String args[]){
 
-    }
 }

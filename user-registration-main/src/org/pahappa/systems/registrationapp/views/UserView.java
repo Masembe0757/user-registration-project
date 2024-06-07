@@ -99,9 +99,8 @@ public class UserView {
         user_service.updateUserOfUserName(user_name);
 
     }
-
     private void deleteUserOfUsername() {
-        System.out.println("Enter user's username you with to delete");
+        System.out.println("Enter user's username you wish to delete");
         String user_name = scanner.nextLine();
         user_service.deleteUserOfUserName(user_name);
     }
