@@ -58,13 +58,14 @@ public class UserView {
                 }
             }catch (Exception e){
                 System.out.println("Invalid choice. Please try again.");
+                System.out.println(e);
                 scanner.nextLine(); // Consume the newline character
             }
         }
     }
 
 
-    private void registerUser() throws ParseException {
+    private void registerUser() {
 
         System.out.println("Enter users first name");
         String first_name = scanner.nextLine();
