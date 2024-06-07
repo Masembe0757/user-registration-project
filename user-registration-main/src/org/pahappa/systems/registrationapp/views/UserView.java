@@ -1,6 +1,5 @@
 package org.pahappa.systems.registrationapp.views;
-import org.pahappa.systems.registrationapp.services.UserService;
-
+import  org.pahappa.systems.registrationapp.services.UserService;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -78,15 +77,9 @@ public class UserView {
 
         System.out.println("Enter users date of birth format mm/dd/yyyy ");
         String date_of_birth = scanner.nextLine();
-        if(date_of_birth.isEmpty()){
-            System.out.println("Seems you are missing the date of birth field, please fill all fields correctly");
-        }
-        else {
-            DateFormat df = new SimpleDateFormat("mm/dd/yyyy");
-            Date date_of_birt = df.parse(date_of_birth);
 
-            user_service.addUser(first_name, last_name, user_name, date_of_birt);
-        }
+        user_service.addUser(first_name, last_name, user_name, date_of_birth);
+
     }
 
     private void displayAllUsers() {

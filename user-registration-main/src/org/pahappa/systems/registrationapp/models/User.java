@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class User {
 
-    public static final List<User> usrnam = new ArrayList<>();
+    public static final List<User> users_list = new ArrayList<>();
 
     private String username;
     private String firstname;

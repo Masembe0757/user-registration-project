@@ -10,7 +10,7 @@ import org.pahappa.systems.registrationapp.models.User;
 public class UserService {
     Scanner scn = new Scanner(System.in);
     User newUser = new User();
-   public void addUser(String first_name, String last_name, String user_name, Date date_of_birth){
+   public void addUser(String first_name, String last_name, String user_name,String date_of_birth) throws ParseException {
        boolean missing_field = false;
 
        if(first_name.isEmpty()){
@@ -21,23 +21,28 @@ public class UserService {
        } else if (user_name.isEmpty()) {
            System.out.println("Seems you are missing the user name field, please fill all fields correctly");
        }
+       else if(date_of_birth.isEmpty()){
+           System.out.println("Seems you are missing the date of birth field, please fill all fields correctly");
+       }
        else {
+           DateFormat df = new SimpleDateFormat("mm/dd/yyyy");
+           Date date_of_birth_parsed = df.parse(date_of_birth);
 
            newUser.setFirstname(first_name);
            newUser.setLastname(last_name);
            newUser.setUsername(user_name);
-           newUser.setDateOfBirth(date_of_birth);
+           newUser.setDateOfBirth(date_of_birth_parsed);
 
            boolean user_present = false;
 
 
-           for (User x : User.usrnam) {
+           for (User x : User.users_list) {
                user_present = x.equals(newUser);
            }
            if (user_present) {
                System.out.println("User already exists in data base ");
            } else {
-               User.usrnam.add(newUser);
+               User.users_list.add(newUser);
                System.out.println("User has been registered");
 
            }
@@ -45,8 +50,8 @@ public class UserService {
 
    }
    public void  returnAllUsers(){
-       if(!User.usrnam.isEmpty()) {
-           for (User x : User.usrnam) {
+       if(!User.users_list.isEmpty()) {
+           for (User x : User.users_list) {
                System.out.println("System has registered the following users");
                System.out.println(" User " + x.getUsername() + " has names " + x.getFirstname() + " " + x.getLastname() + " and has a date of birth  of " + x.getDateOfBirth());
            }
@@ -57,7 +62,7 @@ public class UserService {
    }
 
    public  void returnUserOfUserName(String user_name){
-       for(User x : User.usrnam){
+       for(User x : User.users_list){
            if(x.getUsername().equals(user_name)){
                System.out.println("\n User "+ user_name+ " has details : full name "+ x.getFirstname()+" "+x.getLastname()+ " and date of birth"+ x.getDateOfBirth());
            }
@@ -68,7 +73,7 @@ public class UserService {
    }
 
    public  void updateUserOfUserName(String user_name) throws ParseException {
-       for(User x : User.usrnam){
+       for(User x : User.users_list){
            if(x.getUsername().equals(user_name)){
                System.out.println(" Enter new username");
                String user_name_new = scn.nextLine();
@@ -93,9 +98,9 @@ public class UserService {
        }
    }
    public void deleteUserOfUserName(String user_name){
-       for(User x : User.usrnam){
+       for(User x : User.users_list){
            if(x.getUsername().equals(user_name)){
-               User.usrnam.remove(x);
+               User.users_list.remove(x);
                System.out.println("\n User "+ x.getFirstname()+" "+x.getLastname()+ " has been deleted from system ");
            }
            else{
@@ -104,11 +109,11 @@ public class UserService {
        }
    }
    public  void  deleteAllUsers(){
-       if(User.usrnam.isEmpty()){
+       if(User.users_list.isEmpty()){
            System.out.println("There are no users currently in the system");
        }
        else {
-           User.usrnam.clear();
+           User.users_list.clear();
            System.out.println("All users have been deleted successfully");
        }
    }
