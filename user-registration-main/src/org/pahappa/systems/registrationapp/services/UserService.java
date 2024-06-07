@@ -36,13 +36,13 @@ public class UserService {
            boolean user_present = false;
 
 
-           for (User x : User.users_list) {
+           for (User x : User.getUsersList()) {
                user_present = x.equals(newUser);
            }
            if (user_present) {
                System.out.println("User already exists in data base ");
            } else {
-               User.users_list.add(newUser);
+               User.getUsersList().add(newUser);
                System.out.println("User has been registered");
 
            }
@@ -50,8 +50,8 @@ public class UserService {
 
    }
    public void  returnAllUsers(){
-       if(!User.users_list.isEmpty()) {
-           for (User x : User.users_list) {
+       if(!User.getUsersList().isEmpty()) {
+           for (User x : User.getUsersList()) {
                System.out.println("System has registered the following users");
                System.out.println(" User " + x.getUsername() + " has names " + x.getFirstname() + " " + x.getLastname() + " and has a date of birth  of " + x.getDateOfBirth());
            }
@@ -62,7 +62,7 @@ public class UserService {
    }
 
    public  void returnUserOfUserName(String user_name){
-       for(User x : User.users_list){
+       for(User x : User.getUsersList()){
            if(x.getUsername().equals(user_name)){
                System.out.println("\n User "+ user_name+ " has details : full name "+ x.getFirstname()+" "+x.getLastname()+ " and date of birth"+ x.getDateOfBirth());
            }
@@ -73,7 +73,7 @@ public class UserService {
    }
 
    public  void updateUserOfUserName(String user_name) throws ParseException {
-       for(User x : User.users_list){
+       for(User x : User.getUsersList()){
            if(x.getUsername().equals(user_name)){
                System.out.println(" Enter new username");
                String user_name_new = scn.nextLine();
@@ -98,9 +98,9 @@ public class UserService {
        }
    }
    public void deleteUserOfUserName(String user_name){
-       for(User x : User.users_list){
+       for(User x : User.getUsersList()){
            if(x.getUsername().equals(user_name)){
-               User.users_list.remove(x);
+               User.getUsersList().remove(x);
                System.out.println("\n User "+ x.getFirstname()+" "+x.getLastname()+ " has been deleted from system ");
            }
            else{
@@ -109,11 +109,11 @@ public class UserService {
        }
    }
    public  void  deleteAllUsers(){
-       if(User.users_list.isEmpty()){
+       if(User.getUsersList().isEmpty()){
            System.out.println("There are no users currently in the system");
        }
        else {
-           User.users_list.clear();
+           User.getUsersList().clear();
            System.out.println("All users have been deleted successfully");
        }
    }

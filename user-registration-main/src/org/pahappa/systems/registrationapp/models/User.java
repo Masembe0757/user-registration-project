@@ -6,8 +6,8 @@ import java.util.Objects;
 
 public class User {
 
-    public static final List<User> users_list = new ArrayList<>();
-
+    //public static final List<User> users_list = new ArrayList<>();
+    private static List<User> users_list = new ArrayList<>();
     private String username;
     private String firstname;
     private String lastname;
@@ -17,13 +17,16 @@ public class User {
 
     }
 
-    private User(String username, String firstname, String lastname, Date dateOfBirth){
+    private User(String username, String firstname, String lastname, Date dateOfBirth, List<User> users_list){
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
         this.dateOfBirth = dateOfBirth;
+        this.users_list = users_list;
     }
-
+    public static List<User> getUsersList() {
+        return users_list;
+    }
     public String getUsername() {
         return username;
     }
