@@ -58,7 +58,6 @@ public class UserView {
                 }
             }catch (Exception e){
                 System.out.println("Invalid choice. Please try again.");
-                System.out.println(e);
                 scanner.nextLine(); // Consume the newline character
             }
         }
@@ -67,13 +66,13 @@ public class UserView {
 
     private void registerUser() {
 
-        System.out.println("Enter users first name");
+        System.out.println("Enter users first name (Digits not allowed in this field)");
         String first_name = scanner.nextLine();
 
-        System.out.println("Enter users last name");
+        System.out.println("Enter users last name (Digits not allowed in this field)");
         String last_name = scanner.nextLine();
 
-        System.out.println("Enter users username");
+        System.out.println("Enter users username, (Should not start with a digit, not less than 6 characters, not digits only)");
         String user_name = scanner.nextLine();
 
         System.out.println("Enter users date of birth format mm/dd/yyyy ");
@@ -107,6 +106,13 @@ public class UserView {
 
     private void deleteAllUsers() {
         user_service.deleteAllUsers();
+    }
+
+    public String Scan(){
+        return scanner.nextLine();
+    }
+    public void Print(String print_out){
+        System.out.println(print_out);
     }
 
 
