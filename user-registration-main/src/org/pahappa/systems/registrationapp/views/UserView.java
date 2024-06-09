@@ -1,9 +1,5 @@
 package org.pahappa.systems.registrationapp.views;
-import org.pahappa.systems.registrationapp.models.User;
 import  org.pahappa.systems.registrationapp.services.UserService;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -68,23 +64,22 @@ public class UserView {
     }
 
 
-    private void registerUser() throws ParseException {
+    private void registerUser() {
 
-        System.out.println("Enter users first name");
+        System.out.println("Enter users first name (Digits not allowed in this field)");
         String first_name = scanner.nextLine();
 
-        System.out.println("Enter users last name");
+        System.out.println("Enter users last name (Digits not allowed in this field)");
         String last_name = scanner.nextLine();
 
-        System.out.println("Enter users username");
+        System.out.println("Enter users username, (Should not start with a digit, not less than 6 characters, not digits only)");
         String user_name = scanner.nextLine();
 
         System.out.println("Enter users date of birth format mm/dd/yyyy ");
         String date_of_birth = scanner.nextLine();
-        DateFormat df = new SimpleDateFormat("mm/dd/yyyy");
-        Date date_of_birt = df.parse(date_of_birth);
 
-        user_service.addUser(first_name, last_name, user_name, date_of_birt);
+        user_service.addUser(first_name, last_name, user_name, date_of_birth);
+
     }
 
     private void displayAllUsers() {
@@ -103,15 +98,21 @@ public class UserView {
         user_service.updateUserOfUserName(user_name);
 
     }
-
     private void deleteUserOfUsername() {
-        System.out.println("Enter user's username you with to delete");
+        System.out.println("Enter user's username you wish to delete");
         String user_name = scanner.nextLine();
         user_service.deleteUserOfUserName(user_name);
     }
 
     private void deleteAllUsers() {
         user_service.deleteAllUsers();
+    }
+
+    public String Scan(){
+        return scanner.nextLine();
+    }
+    public void Print(String print_out){
+        System.out.println(print_out);
     }
 
 
