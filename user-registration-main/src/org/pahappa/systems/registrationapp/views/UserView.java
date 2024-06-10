@@ -75,7 +75,7 @@ public class UserView {
         System.out.println("Enter users username, (Should not start with a digit, not less than 6 characters, not digits only)");
         String user_name = scanner.nextLine();
 
-        System.out.println("Enter users date of birth format mm/dd/yyyy ");
+        System.out.println("Enter users date of birth format yyyy-mm-dd ");
         String date_of_birth = scanner.nextLine();
 
         user_service.addUser(first_name, last_name, user_name, date_of_birth);
@@ -86,7 +86,7 @@ public class UserView {
         user_service.returnAllUsers();
     }
 
-    private void getUserOfUsername() {
+    private void getUserOfUsername(){
         System.out.println("Enter user's username");
         String user_name = scanner.nextLine();
         user_service.returnUserOfUserName(user_name);

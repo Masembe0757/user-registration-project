@@ -34,7 +34,7 @@ public class UserService {
     }
 
     public Date dateFormat(String date) throws ParseException {
-        DateFormat df = new SimpleDateFormat("mm/dd/yyyy");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         return df.parse(date);
 
     }
@@ -103,14 +103,15 @@ public class UserService {
        }
 
    }
-   public void  returnAllUsers(){
+   public void  returnAllUsers() {
        UserView user_view = new UserView();
+       DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
        if(!users_list.isEmpty()) {
            user_view.Print("System has registered the following users");
            for (User x : users_list) {
 
-               user_view.Print(" User " + x.getUsername() + " has names " + x.getFirstname() + " " + x.getLastname() + " and has a date of birth  of " + x.getDateOfBirth());
+               user_view.Print(" User " + x.getUsername() + " has names " + x.getFirstname() + " " + x.getLastname() + " and has a date of birth  of " +df.format(x.getDateOfBirth()));
            }
        }
        else{
@@ -118,14 +119,15 @@ public class UserService {
        }
    }
 
-   public  void returnUserOfUserName(String user_name){
+   public  void returnUserOfUserName(String user_name) {
        UserView user_view = new UserView();
+       DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
        boolean user_present = false;
         if(!users_list.isEmpty()) {
             for (User x : users_list) {
                 if (x.getUsername().contains(user_name)) {
                     user_present = true;
-                    user_view.Print("\n User " + user_name + " has details : full name " + x.getFirstname() + " " + x.getLastname() + " and date of birth" + x.getDateOfBirth());
+                    user_view.Print("\n User " + user_name + " has details : full name " + x.getFirstname() + " " + x.getLastname() + " and date of birth of " +df.format(x.getDateOfBirth()));
                 }
             }
             if(!user_present){
