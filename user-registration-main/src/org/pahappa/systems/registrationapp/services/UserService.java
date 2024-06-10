@@ -1,9 +1,12 @@
 package org.pahappa.systems.registrationapp.services;
 
+import java.io.DataInput;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,8 +37,11 @@ public class UserService {
     }
 
     public Date dateFormat(String date) throws ParseException {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        return df.parse(date);
+        DateFormat df = new  SimpleDateFormat("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        System.out.println();
+        return df.parse(formatter.parse(date).toString().split(" ")[3]);
+
 
     }
    public void addUser(String first_name, String last_name, String user_name,String date_of_birth) {
@@ -95,7 +101,7 @@ public class UserService {
                     }
 
             }catch (Exception e){
-                user_view.Print("Date provided is of incorrect format, please refill the field correctly below :");
+                user_view.Print("Date provided is of incorrect format yyyy-mm-dd ,invalid month of the year or invalid day of the month, please refill the field correctly below :");
                 addUser(first_name,last_name,user_name, user_view.Scan());
             }
 
@@ -137,7 +143,6 @@ public class UserService {
             user_view.Print("System is currently empty, no users to return");
         }
    }
-
    public  void updateUserOfUserName(String user_name) throws ParseException {
        UserView user_view = new UserView();
        boolean  user_present = false;
