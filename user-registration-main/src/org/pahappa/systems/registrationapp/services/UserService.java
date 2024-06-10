@@ -38,9 +38,6 @@ public class UserService {
         return df.parse(date);
 
     }
-    public  void firstNameValidation(String str){
-
-    }
    public void addUser(String first_name, String last_name, String user_name,String date_of_birth) {
        User newUser = new User();
        UserView user_view = new UserView();
@@ -126,7 +123,7 @@ public class UserService {
        boolean user_present = false;
         if(!users_list.isEmpty()) {
             for (User x : users_list) {
-                if (x.getUsername().equals(user_name)) {
+                if (x.getUsername().contains(user_name)) {
                     user_present = true;
                     user_view.Print("\n User " + user_name + " has details : full name " + x.getFirstname() + " " + x.getLastname() + " and date of birth" + x.getDateOfBirth());
                 }
@@ -148,10 +145,8 @@ public class UserService {
         else {
 
             for (User x : users_list) {
-                if (x.getUsername().equals(user_name)) {
+                if (x.getUsername().contains(user_name)) {
                     user_present = true;
-                    user_view.Print(" Enter new username");
-                    String user_name_new = user_view.Scan();
                     user_view.Print("Enter users new first name");
                     String first_name_new = user_view.Scan();
                     user_view.Print("Enter users new last name");
@@ -159,12 +154,37 @@ public class UserService {
                     user_view.Print("Enter users new date of birth");
                     String date_of_birth_new = user_view.Scan();
 
-                    Date date_of_birth_parsed_new = dateFormat(date_of_birth_new);
-                    x.setDateOfBirth(date_of_birth_parsed_new);
-                    x.setFirstname(first_name_new);
-                    x.setLastname(last_name_new);
-                    x.setUsername(user_name_new);
-                    user_view.Print("User details have been updated successfully");
+                    //update validation
+                    if(first_name_new.isEmpty() || hasDigits(first_name_new) ){
+                        user_view.Print("First name field missing or has digits in it, please try again with valid update details :");
+                        updateUserOfUserName(user_name);
+                    }
+                    else if(last_name_new.isEmpty() || hasDigits(last_name_new) ){
+                        user_view.Print("Last name field missing or has digits in it, please try again with valid update details :");
+                        updateUserOfUserName(user_name);
+                    } else if(date_of_birth_new.isEmpty()) {
+                        user_view.Print("Date of birth field missing, please try again with valid update details :");
+                        updateUserOfUserName(user_name);
+                    }
+                    else {
+                        try {
+                            Date date_of_birth_parsed_new = dateFormat(date_of_birth_new);
+
+                            if (date_of_birth_parsed_new.getYear()+1900 < Calendar.getInstance().get(Calendar.YEAR)){
+                                x.setDateOfBirth(date_of_birth_parsed_new);
+                                x.setFirstname(first_name_new);
+                                x.setLastname(last_name_new);
+                                user_view.Print("User details have been updated successfully");
+                            }else {
+                                user_view.Print("Date provided is beyond current date, please try again with valid update details : ");
+                                updateUserOfUserName(user_name);
+                            }
+
+                        }catch (Exception e){
+                            user_view.Print("Date provided is of incorrect format, please try again with valid update details :");
+                            updateUserOfUserName(user_name);
+                        }
+                    }
                 }
             }
 
@@ -178,7 +198,7 @@ public class UserService {
        boolean user_present = false;
         if(!users_list.isEmpty()) {
             for (User x : users_list) {
-                if (x.getUsername().equals(user_name)) {
+                if (x.getUsername().contains(user_name)) {
                     user_present =true;
                     users_list.remove(x);
                     user_view.Print("\n User " + x.getFirstname() + " " + x.getLastname() + " has been deleted from system ");
