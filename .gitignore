@@ -5,3 +5,5 @@ bin/
 .DS_Store
 *.class
 .vscode/
+pom.xml
+target/
