@@ -131,7 +131,7 @@ public class UserService {
        boolean user_present = false;
         if(!users_list.isEmpty()) {
             for (User x : users_list) {
-                if (x.getUsername().contains(user_name)) {
+                if (x.getUsername().equals(user_name)) {
                     user_present = true;
                     user_view.Print("\n User " + user_name + " has details : full name " + x.getFirstname() + " " + x.getLastname() + " and date of birth of " +df.format(x.getDateOfBirth()));
                 }
@@ -152,7 +152,7 @@ public class UserService {
         else {
 
             for (User x : users_list) {
-                if (x.getUsername().contains(user_name)) {
+                if (x.getUsername().equals(user_name)) {
                     user_present = true;
                     user_view.Print("Enter users new first name");
                     String first_name_new = user_view.Scan();
@@ -205,7 +205,7 @@ public class UserService {
        boolean user_present = false;
         if(!users_list.isEmpty()) {
             for (User x : users_list) {
-                if (x.getUsername().contains(user_name)) {
+                if (x.getUsername().equals(user_name)) {
                     user_present =true;
                     users_list.remove(x);
                     user_view.Print("\n User " + x.getFirstname() + " " + x.getLastname() + " has been deleted from system ");
