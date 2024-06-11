@@ -1,9 +1,12 @@
 package org.pahappa.systems.registrationapp.services;
 
+import java.io.DataInput;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,11 +37,11 @@ public class UserService {
     }
 
     public Date dateFormat(String date) throws ParseException {
-        DateFormat df = new SimpleDateFormat("mm/dd/yyyy");
-        return df.parse(date);
+        DateFormat df = new  SimpleDateFormat("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        System.out.println();
+        return df.parse(formatter.parse(date).toString().split(" ")[3]);
 
-    }
-    public  void firstNameValidation(String str){
 
     }
    public void addUser(String first_name, String last_name, String user_name,String date_of_birth) {
@@ -98,7 +101,7 @@ public class UserService {
                     }
 
             }catch (Exception e){
-                user_view.Print("Date provided is of incorrect format, please refill the field correctly below :");
+                user_view.Print("Date provided is of incorrect format yyyy-mm-dd ,invalid month of the year or invalid day of the month, please refill the field correctly below :");
                 addUser(first_name,last_name,user_name, user_view.Scan());
             }
 
@@ -106,14 +109,15 @@ public class UserService {
        }
 
    }
-   public void  returnAllUsers(){
+   public void  returnAllUsers() {
        UserView user_view = new UserView();
+       DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
        if(!users_list.isEmpty()) {
            user_view.Print("System has registered the following users");
            for (User x : users_list) {
 
-               user_view.Print(" User " + x.getUsername() + " has names " + x.getFirstname() + " " + x.getLastname() + " and has a date of birth  of " + x.getDateOfBirth());
+               user_view.Print(" User " + x.getUsername() + " has names " + x.getFirstname() + " " + x.getLastname() + " and has a date of birth  of " +df.format(x.getDateOfBirth()));
            }
        }
        else{
@@ -121,14 +125,15 @@ public class UserService {
        }
    }
 
-   public  void returnUserOfUserName(String user_name){
+   public  void returnUserOfUserName(String user_name) {
        UserView user_view = new UserView();
+       DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
        boolean user_present = false;
         if(!users_list.isEmpty()) {
             for (User x : users_list) {
-                if (x.getUsername().equals(user_name)) {
+                if (x.getUsername().contains(user_name)) {
                     user_present = true;
-                    user_view.Print("\n User " + user_name + " has details : full name " + x.getFirstname() + " " + x.getLastname() + " and date of birth" + x.getDateOfBirth());
+                    user_view.Print("\n User " + user_name + " has details : full name " + x.getFirstname() + " " + x.getLastname() + " and date of birth of " +df.format(x.getDateOfBirth()));
                 }
             }
             if(!user_present){
@@ -138,7 +143,6 @@ public class UserService {
             user_view.Print("System is currently empty, no users to return");
         }
    }
-
    public  void updateUserOfUserName(String user_name) throws ParseException {
        UserView user_view = new UserView();
        boolean  user_present = false;
@@ -148,10 +152,8 @@ public class UserService {
         else {
 
             for (User x : users_list) {
-                if (x.getUsername().equals(user_name)) {
+                if (x.getUsername().contains(user_name)) {
                     user_present = true;
-                    user_view.Print(" Enter new username");
-                    String user_name_new = user_view.Scan();
                     user_view.Print("Enter users new first name");
                     String first_name_new = user_view.Scan();
                     user_view.Print("Enter users new last name");
@@ -159,12 +161,37 @@ public class UserService {
                     user_view.Print("Enter users new date of birth");
                     String date_of_birth_new = user_view.Scan();
 
-                    Date date_of_birth_parsed_new = dateFormat(date_of_birth_new);
-                    x.setDateOfBirth(date_of_birth_parsed_new);
-                    x.setFirstname(first_name_new);
-                    x.setLastname(last_name_new);
-                    x.setUsername(user_name_new);
-                    user_view.Print("User details have been updated successfully");
+                    //update validation
+                    if(first_name_new.isEmpty() || hasDigits(first_name_new) ){
+                        user_view.Print("First name field missing or has digits in it, please try again with valid update details :");
+                        updateUserOfUserName(user_name);
+                    }
+                    else if(last_name_new.isEmpty() || hasDigits(last_name_new) ){
+                        user_view.Print("Last name field missing or has digits in it, please try again with valid update details :");
+                        updateUserOfUserName(user_name);
+                    } else if(date_of_birth_new.isEmpty()) {
+                        user_view.Print("Date of birth field missing, please try again with valid update details :");
+                        updateUserOfUserName(user_name);
+                    }
+                    else {
+                        try {
+                            Date date_of_birth_parsed_new = dateFormat(date_of_birth_new);
+
+                            if (date_of_birth_parsed_new.getYear()+1900 < Calendar.getInstance().get(Calendar.YEAR)){
+                                x.setDateOfBirth(date_of_birth_parsed_new);
+                                x.setFirstname(first_name_new);
+                                x.setLastname(last_name_new);
+                                user_view.Print("User details have been updated successfully");
+                            }else {
+                                user_view.Print("Date provided is beyond current date, please try again with valid update details : ");
+                                updateUserOfUserName(user_name);
+                            }
+
+                        }catch (Exception e){
+                            user_view.Print("Date provided is of incorrect format, please try again with valid update details :");
+                            updateUserOfUserName(user_name);
+                        }
+                    }
                 }
             }
 
@@ -178,7 +205,7 @@ public class UserService {
        boolean user_present = false;
         if(!users_list.isEmpty()) {
             for (User x : users_list) {
-                if (x.getUsername().equals(user_name)) {
+                if (x.getUsername().contains(user_name)) {
                     user_present =true;
                     users_list.remove(x);
                     user_view.Print("\n User " + x.getFirstname() + " " + x.getLastname() + " has been deleted from system ");
