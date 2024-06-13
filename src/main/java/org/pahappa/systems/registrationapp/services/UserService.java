@@ -1,22 +1,34 @@
 package org.pahappa.systems.registrationapp.services;
 
-import java.io.DataInput;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import org.pahappa.systems.registrationapp.exception.RandomException;
 import org.pahappa.systems.registrationapp.models.User;
 import org.pahappa.systems.registrationapp.views.UserView;
+import org.pahappa.systems.registrationapp.dao.UserRegDao;
 
 public class UserService {
-    private final List<User> users_list = new ArrayList<>();
-    public static boolean onlyDigits(String str, int n)
+
+    public boolean HasSpecialCharacters(String s){
+        boolean has_character = false;
+        for (int i = 0; i < s.length(); i++) {
+            // Checking the character for not being a letter,digit or space
+            if (!Character.isDigit(s.charAt(i))
+                    && !Character.isLetter(s.charAt(i))
+                    && !Character.isWhitespace(s.charAt(i))) {
+                has_character =true;
+
+            }
+        }
+        return has_character;
+    }
+
+    //Generic method to check if username has only digits
+    public static boolean OnlyDigits(String str, int n)
     {
         for (int i = 0; i < n; i++) {
             if (str.charAt(i) < '0'
@@ -26,7 +38,8 @@ public class UserService {
         }
         return true;
     }
-    public  boolean hasDigits(String str){
+    //Generic method to check if name provided has digits in it
+    public  boolean HasDigits(String str){
         boolean has_digits = false;
         for(int i =0 ; i < str.length(); i++){
             if(Character.isDigit(str.charAt(i))){
@@ -36,197 +49,199 @@ public class UserService {
         return has_digits;
     }
 
-    public Date dateFormat(String date) throws ParseException {
+    //Generic method to check date format
+    public Date DateFormat(String date) throws ParseException {
         DateFormat df = new  SimpleDateFormat("yyyy-MM-dd");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         System.out.println();
         return df.parse(formatter.parse(date).toString().split(" ")[3]);
 
-
     }
-   public void addUser(String first_name, String last_name, String user_name,String date_of_birth) {
+
+    //Generic method to check if there are users in the database
+    public boolean UsersAvailable(){
+        List<User> users_list_new = UserRegDao.ReturnAllUsers();
+        return !users_list_new.isEmpty();
+    }
+   public void AddUser(String first_name, String last_name, String user_name, String date_of_birth) {
        User newUser = new User();
        UserView user_view = new UserView();
-       if(first_name.isEmpty() || hasDigits(first_name) ){
-           user_view.Print("First name field missing or has digits in it, please refill the field below :");
-           addUser(user_view.Scan(),last_name,user_name,date_of_birth);
+       if(first_name.isEmpty() || HasDigits(first_name) ||HasSpecialCharacters(first_name) ){
+           user_view.Print("First name field missing or has digits or special characters in it, please refill the field below :");
+           AddUser(user_view.Scan(),last_name,user_name,date_of_birth);
        }
-       else if(last_name.isEmpty() || hasDigits(last_name) ){
-           user_view.Print("Last name field missing or has digits in it, please refill the field correctly below :");
-           addUser(first_name,user_view.Scan(),user_name,date_of_birth);
-       } else if (user_name.isEmpty() || user_name.length() < 6 ) {
-           user_view.Print("User name field missing or characters less than 6, please refill the field correctly below :");
-           addUser(first_name,last_name,user_view.Scan(),date_of_birth);
+       else if(HasDigits(last_name) || HasSpecialCharacters(last_name)){
+           user_view.Print("Last name field has digits or special characters  in it, please refill the field correctly below :");
+           AddUser(first_name,user_view.Scan(),user_name,date_of_birth);
+       } else if (user_name.isEmpty() || user_name.length() < 6 || HasSpecialCharacters(user_name) ) {
+           user_view.Print("User name field missing or characters less than 6 or has special characters , please refill the field correctly below :");
+           AddUser(first_name,last_name,user_view.Scan(),date_of_birth);
        } else if (Character.isDigit(user_name.charAt(0))) {
            user_view.Print("User name field  can not start with a digit, please refill the field correctly below :");
-           addUser(first_name,last_name,user_view.Scan(),date_of_birth);
-       } else if (onlyDigits(user_name, user_name.length())) {
+           AddUser(first_name,last_name,user_view.Scan(),date_of_birth);
+       } else if (OnlyDigits(user_name, user_name.length())) {
            user_view.Print("User name field can not contain only digits, please refill the field correctly below :");
-           addUser(first_name,last_name,user_view.Scan(),date_of_birth);
+           AddUser(first_name,last_name,user_view.Scan(),date_of_birth);
        } else if(date_of_birth.isEmpty()) {
            user_view.Print("Date of birth field missing, please refill the field correctly below with correct format:");
-           addUser(first_name, last_name, user_name, user_view.Scan());
+           AddUser(first_name, last_name, user_name, user_view.Scan());
        }else {
             try {
-                Date date_of_birth_parsed = dateFormat(date_of_birth);
-                newUser.setDateOfBirth(date_of_birth_parsed);
-                newUser.setFirstname(first_name);
-                newUser.setLastname(last_name);
-                newUser.setUsername(user_name);
-
-                boolean user_name_present = false;
-
-
-                for (User x : users_list) {
-                    if(x.getUsername().contains(user_name)){
-                        user_name_present = true;
-                    }
-                    else {
-                        user_name_present =false;
-                    }
-                }
-                if (user_name_present) {
+                Date date_of_birth_parsed = DateFormat(date_of_birth);
+                User returned_user = UserRegDao.ReturnUser(user_name);
+                if (returned_user!= null) {
                     user_view.Print("User name already taken please enter new user name below : ");
-                    addUser(first_name,last_name, user_view.Scan(), date_of_birth);
+                    AddUser(first_name,last_name, user_view.Scan(), date_of_birth);
                 } else {
                         if(date_of_birth_parsed.getYear()+1900 < Calendar.getInstance().get(Calendar.YEAR)) {
-                            users_list.add(newUser);
-                            System.out.println("User has been registered successfully (*_*) ");
+                            newUser.setDateOfBirth(date_of_birth_parsed);
+                            newUser.setFirstname(first_name);
+                            newUser.setLastname(last_name);
+                            newUser.setUsername(user_name);
+                            UserRegDao.SaveUser(newUser);
+                            user_view.Print("User has been registered successfully (*_*) ");
+
                         }
                         else {
                             user_view.Print("Date provided is beyond current date, please enter correct date of birth bellow:");
-                            addUser(first_name, last_name, user_name, user_view.Scan());
+                            AddUser(first_name, last_name, user_name, user_view.Scan());
                         }
 
                     }
 
             }catch (Exception e){
                 user_view.Print("Date provided is of incorrect format yyyy-mm-dd ,invalid month of the year or invalid day of the month, please refill the field correctly below :");
-                addUser(first_name,last_name,user_name, user_view.Scan());
+                AddUser(first_name,last_name,user_name, user_view.Scan());
             }
 
 
        }
 
    }
-   public void  returnAllUsers() {
+   public void ReturnAllUsers() throws RandomException {
        UserView user_view = new UserView();
-       DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+       List<User> users_list_new = UserRegDao.ReturnAllUsers();
 
-       if(!users_list.isEmpty()) {
+       if(UsersAvailable()) {
            user_view.Print("System has registered the following users");
-           for (User x : users_list) {
-
-               user_view.Print(" User " + x.getUsername() + " has names " + x.getFirstname() + " " + x.getLastname() + " and has a date of birth  of " +df.format(x.getDateOfBirth()));
+           for(User user : users_list_new){
+               System.out.println(user);
            }
        }
        else{
-           user_view.Print("System has no registered users currently");
+           throw new RandomException("System has no registered users currently");
        }
    }
 
-   public  void returnUserOfUserName(String user_name) {
-       UserView user_view = new UserView();
-       DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-       boolean user_present = false;
-        if(!users_list.isEmpty()) {
-            for (User x : users_list) {
-                if (x.getUsername().equals(user_name)) {
-                    user_present = true;
-                    user_view.Print("\n User " + user_name + " has details : full name " + x.getFirstname() + " " + x.getLastname() + " and date of birth of " +df.format(x.getDateOfBirth()));
-                }
+   public  void ReturnUserOfUserName(String user_name) throws RandomException {
+
+        if(UsersAvailable()) {
+            User returned_user = UserRegDao.ReturnUser(user_name);
+            if(returned_user == null){
+                throw new RandomException("The user is not registered in the system");
             }
-            if(!user_present){
-                user_view.Print("The user is not registered in the system");
+            else {
+                System.out.println(returned_user.toString());
             }
         }else {
-            user_view.Print("System is currently empty, no users to return");
+            throw new RandomException("System is currently empty, no users to return");
         }
    }
-   public  void updateUserOfUserName(String user_name) throws ParseException {
+   public  void UpdateUserOfUserName(String user_name) throws ParseException, RandomException {
        UserView user_view = new UserView();
+       List<User> users_list_new = UserRegDao.ReturnAllUsers();
        boolean  user_present = false;
-        if(users_list.isEmpty()) {
-            user_view.Print("No users to update, system currently empty");
+        if(!UsersAvailable()) {
+            throw new RandomException("No users to update, system currently empty");
         }
         else {
-
-            for (User x : users_list) {
-                if (x.getUsername().equals(user_name)) {
-                    user_present = true;
+                User returned_user = UserRegDao.ReturnUser(user_name);
+                if (returned_user!=null) {
                     user_view.Print("Enter users new first name");
                     String first_name_new = user_view.Scan();
                     user_view.Print("Enter users new last name");
                     String last_name_new = user_view.Scan();
-                    user_view.Print("Enter users new date of birth");
+                    user_view.Print("Enter users new date of birth format yyyy-mm-dd ");
                     String date_of_birth_new = user_view.Scan();
 
                     //update validation
-                    if(first_name_new.isEmpty() || hasDigits(first_name_new) ){
-                        user_view.Print("First name field missing or has digits in it, please try again with valid update details :");
-                        updateUserOfUserName(user_name);
+
+                    if(first_name_new.isEmpty() || HasDigits(first_name_new) || HasSpecialCharacters(first_name_new) ){
+                        user_view.Print("First name field missing, has digits or special characters  in it, please try again with valid update details :");
+                        UpdateUserOfUserName(user_name);
                     }
-                    else if(last_name_new.isEmpty() || hasDigits(last_name_new) ){
-                        user_view.Print("Last name field missing or has digits in it, please try again with valid update details :");
-                        updateUserOfUserName(user_name);
+                    else if(HasDigits(last_name_new) || HasSpecialCharacters(last_name_new)){
+                        user_view.Print("Last name field has digits or special characters in it, please try again with valid update details :");
+                        UpdateUserOfUserName(user_name);
                     } else if(date_of_birth_new.isEmpty()) {
                         user_view.Print("Date of birth field missing, please try again with valid update details :");
-                        updateUserOfUserName(user_name);
+                        UpdateUserOfUserName(user_name);
                     }
                     else {
                         try {
-                            Date date_of_birth_parsed_new = dateFormat(date_of_birth_new);
+                            Date date_of_birth_parsed_new = DateFormat(date_of_birth_new);
 
                             if (date_of_birth_parsed_new.getYear()+1900 < Calendar.getInstance().get(Calendar.YEAR)){
-                                x.setDateOfBirth(date_of_birth_parsed_new);
-                                x.setFirstname(first_name_new);
-                                x.setLastname(last_name_new);
-                                user_view.Print("User details have been updated successfully");
+                                int result = UserRegDao.UpdateUser(first_name_new,last_name_new,user_name,date_of_birth_parsed_new);
+                                if(result>0) {
+                                    throw new RandomException("User details have been updated successfully");
+                                }else {
+                                    throw new RandomException("User update failed");
+                                }
                             }else {
                                 user_view.Print("Date provided is beyond current date, please try again with valid update details : ");
-                                updateUserOfUserName(user_name);
+                                UpdateUserOfUserName(user_name);
                             }
 
                         }catch (Exception e){
                             user_view.Print("Date provided is of incorrect format, please try again with valid update details :");
-                            updateUserOfUserName(user_name);
+                            UpdateUserOfUserName(user_name);
                         }
                     }
+            }
+                else {
+                    throw  new RandomException("User not registered in the database");
                 }
-            }
-
-            if (!user_present){
-                user_view.Print("The user is not registered in the system");
-            }
         }
    }
-   public void deleteUserOfUserName(String user_name){
+   public void DeleteUserOfUserName(String user_name) throws RandomException {
        UserView user_view = new UserView();
-       boolean user_present = false;
-        if(!users_list.isEmpty()) {
-            for (User x : users_list) {
-                if (x.getUsername().equals(user_name)) {
-                    user_present =true;
-                    users_list.remove(x);
-                    user_view.Print("\n User " + x.getFirstname() + " " + x.getLastname() + " has been deleted from system ");
+
+        if(UsersAvailable()) {
+            User returned_user = UserRegDao.ReturnUser(user_name);
+                if (returned_user!=null) {
+                    int out_come = UserRegDao.DeleteUser(user_name);
+                    UserRegDao.DeleteUser(user_name);
+                    if(out_come >0 ) {
+                        user_view.Print("User " + returned_user.getFirstname() + " " + returned_user.getLastname() + " has been deleted successfully");
+                    }
+                    else {
+                        user_view.Print("Deletion operation failed");
+                    }
+
                 }
-            }
-            if(!user_present){
-                user_view.Print("The user is not registered in the system");
-            }
+                else {
+                    throw new RandomException("The username supplied is not in the database");
+                }
         }
         else {
-            user_view.Print("No users in system to delete yet");
+            throw new RandomException("No users in system to delete yet");
         }
    }
-   public  void  deleteAllUsers(){
-       UserView user_view = new UserView();
-       if(users_list.isEmpty()){
-           user_view.Print("There are no users currently in the system");
+   public  void DeleteAllUsers() throws RandomException {
+        UserView user_view = new UserView();
+       if(UsersAvailable()){
+           int out_come = UserRegDao.DeleteAllUsers();
+           if(out_come >0 ) {
+               user_view.Print("All users have been deleted successfully");
+           }
+           else {
+               throw new RandomException("Delete operation failed");
+           }
+
        }
        else {
-           users_list.clear();
-           user_view.Print("All users have been deleted successfully");
+           throw  new RandomException("There are no users currently in the system");
        }
    }
 

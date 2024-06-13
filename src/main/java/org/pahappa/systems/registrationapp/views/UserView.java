@@ -1,9 +1,8 @@
 package org.pahappa.systems.registrationapp.views;
+import org.pahappa.systems.registrationapp.exception.RandomException;
 import  org.pahappa.systems.registrationapp.services.UserService;
-import java.text.DateFormat;
+
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
 
 public class UserView {
@@ -59,7 +58,10 @@ public class UserView {
             }catch (Exception e){
                 System.out.println("Invalid choice. Please try again.");
                 scanner.nextLine(); // Consume the newline character
+            }catch (RandomException m){
+                System.out.println(m.getMessage());
             }
+
         }
     }
 
@@ -78,34 +80,34 @@ public class UserView {
         System.out.println("Enter users date of birth format yyyy-mm-dd ");
         String date_of_birth = scanner.nextLine();
 
-        user_service.addUser(first_name, last_name, user_name, date_of_birth);
+        user_service.AddUser(first_name, last_name, user_name, date_of_birth);
 
     }
 
-    private void displayAllUsers() {
-        user_service.returnAllUsers();
+    private void displayAllUsers() throws RandomException {
+        user_service.ReturnAllUsers();
     }
 
-    private void getUserOfUsername(){
+    private void getUserOfUsername() throws RandomException {
         System.out.println("Enter user's username");
         String user_name = scanner.nextLine();
-        user_service.returnUserOfUserName(user_name);
+        user_service.ReturnUserOfUserName(user_name);
     }
 
-    private void updateUserOfUsername() throws ParseException {
+    private void updateUserOfUsername() throws ParseException, RandomException {
         System.out.println("Enter user's username");
         String user_name = scanner.nextLine();
-        user_service.updateUserOfUserName(user_name);
+        user_service.UpdateUserOfUserName(user_name);
 
     }
-    private void deleteUserOfUsername() {
+    private void deleteUserOfUsername() throws RandomException {
         System.out.println("Enter user's username you wish to delete");
         String user_name = scanner.nextLine();
-        user_service.deleteUserOfUserName(user_name);
+        user_service.DeleteUserOfUserName(user_name);
     }
 
-    private void deleteAllUsers() {
-        user_service.deleteAllUsers();
+    private void deleteAllUsers() throws RandomException {
+        user_service.DeleteAllUsers();
     }
 
     public String Scan(){

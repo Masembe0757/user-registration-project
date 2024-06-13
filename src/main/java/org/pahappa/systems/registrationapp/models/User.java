@@ -1,16 +1,33 @@
 package org.pahappa.systems.registrationapp.models;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import  java.util.*;
 
 import java.util.Date;
 import java.util.Objects;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.AnnotationConfiguration;
+import org.pahappa.systems.registrationapp.config.SessionConfiguration;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "user_table")
 public class User {
 
-    //public static final List<User> users_list = new ArrayList<>();
-
+    @Id
+    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    @Column(name = "user_name")
     private String username;
+    @Column(name = "first_name")
     private String firstname;
+    @Column(name = "last_name")
     private String lastname;
+    @Column(name = "date_of_birth")
     private Date dateOfBirth;
 
     public User(){
@@ -55,10 +72,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
-    @Override
-    public String toString() {
-        return username;
-    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -77,4 +91,10 @@ public class User {
         return Objects.hash(username, firstname, lastname, dateOfBirth);
     }
 
+    @Override
+    public String toString() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+        return "User : " + username + " has  full name : " + firstname + ' ' + lastname + ' ' + " and a date of birth : " + df.format(dateOfBirth);
+    }
 }
