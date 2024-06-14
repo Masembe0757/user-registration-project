@@ -225,15 +225,23 @@ public class UserService {
         }
    }
    public  void deleteAllUsers() throws RandomException {
+       UserView userView = new UserView();
 
        if(usersAvailable()){
-           int outCome = UserRegDao.deleteAllUsers();
-           if(outCome >0 ) {
-               UserView.Print("All users have been deleted successfully");
+           UserView.Print("Are you sure you want to delete all users? 1-yes 0-no");
+           int confirmation = Integer.parseInt(userView.Scan());
+           if(confirmation==1){
+               int outCome = UserRegDao.deleteAllUsers();
+               if(outCome >0 ) {
+                   UserView.Print("All users have been deleted successfully");
+               }
+               else {
+                   throw new RandomException("Delete operation failed");
+               }
+           }else {
+                    throw new RandomException("Operation cancelling successful, thanks for using our system");
            }
-           else {
-               throw new RandomException("Delete operation failed");
-           }
+
 
        }
        else {

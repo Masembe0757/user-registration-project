@@ -5,18 +5,12 @@ import  java.util.*;
 
 import java.util.Date;
 import java.util.Objects;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.AnnotationConfiguration;
-import org.pahappa.systems.registrationapp.config.SessionConfiguration;
-
 import javax.persistence.*;
 
 @Entity
 @Table(name = "user_table")
+@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 public class User {
-
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,6 +23,10 @@ public class User {
     private String lastname;
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
+
+
+//    @OneToMany(mappedBy = "user")
+//    private List< Dependant>  dependant;
 
     public User(){
 
