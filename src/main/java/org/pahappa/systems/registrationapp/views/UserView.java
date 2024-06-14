@@ -58,6 +58,8 @@ public class UserView {
             }catch (Exception e){
                 System.out.println("Invalid choice. Please try again.");
                 scanner.nextLine(); // Consume the newline character
+            } catch (RandomException e) {
+                System.out.println(e.getMessage());
             }
 
         }
