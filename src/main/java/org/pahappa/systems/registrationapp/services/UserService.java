@@ -1,5 +1,6 @@
 package org.pahappa.systems.registrationapp.services;
 
+import java.awt.image.RasterFormatException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

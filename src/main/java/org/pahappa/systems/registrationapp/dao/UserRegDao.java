@@ -10,14 +10,6 @@ import java.util.Date;
 import java.util.List;
 
 public class UserRegDao {
-
-
-    public static Transaction getTransaction(){
-        SessionFactory sf = SessionConfiguration.getSessionFactory();
-        Session session = sf.openSession();
-        Transaction trs = session.beginTransaction();
-        return trs;
-    }
     public static void saveUser(User user){
         try {
             SessionFactory sf = SessionConfiguration.getSessionFactory();
@@ -29,6 +21,7 @@ public class UserRegDao {
         }
         catch (Exception e){
             UserView.Print("Session to save not created successfully");
+            SessionConfiguration.shutdown();
         }
     }
 
@@ -46,6 +39,7 @@ public class UserRegDao {
             }
             catch (Exception e){
                 UserView.Print("Session to return users not created successfully");
+                SessionConfiguration.shutdown();
             }
                 return users;
     }
@@ -63,6 +57,7 @@ public class UserRegDao {
         }
         catch (Exception e){
             UserView.Print("Session to return a user not created successfully");
+            SessionConfiguration.shutdown();
         }
             return user;
     }
@@ -79,6 +74,7 @@ public class UserRegDao {
             SessionConfiguration.shutdown();
         }catch (Exception e){
             UserView.Print("Session to delete a user not created successfully");
+            SessionConfiguration.shutdown();
         }
         return result;
     }
@@ -95,6 +91,7 @@ public class UserRegDao {
         }
         catch (Exception e){
             UserView.Print("Session to delete users not created successfully");
+            SessionConfiguration.shutdown();
         }
         return  result;
     }
@@ -115,6 +112,7 @@ public class UserRegDao {
         }
         catch (Exception e){
             UserView.Print("Session to update a user not created successfully");
+            SessionConfiguration.shutdown();
         }
         return result;
     }

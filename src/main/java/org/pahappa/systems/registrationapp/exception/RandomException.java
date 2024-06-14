@@ -4,5 +4,4 @@ public class RandomException extends Throwable {
     public RandomException(String errorMessage) {
         super(errorMessage);
     }
-
 }

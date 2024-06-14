@@ -56,7 +56,7 @@ public class UserView {
                         System.out.println("Invalid choice. Please try again.");
                 }
             }catch (Exception e){
-                System.out.println("Invalid choice. Please try again.");
+                System.out.println("The following error has occurred " + e.getMessage());
                 scanner.nextLine(); // Consume the newline character
             } catch (RandomException e) {
                 System.out.println(e.getMessage());
@@ -69,18 +69,18 @@ public class UserView {
     private void registerUser() {
 
         System.out.println("Enter users first name (required , no digits or special characters)");
-        String first_name = scanner.nextLine();
+        String firstName = scanner.nextLine();
 
         System.out.println("Enter users last name (optional , no digits or special characters)");
-        String last_name = scanner.nextLine();
+        String lastName = scanner.nextLine();
 
         System.out.println("Enter users username, (required, should not start with a digit, not less than 6 characters, not consist digits only, no special characters)");
-        String user_name = scanner.nextLine();
+        String userName = scanner.nextLine();
 
         System.out.println("Enter users date of birth format yyyy-mm-dd (not beyond current date, right month of year, right day of month)");
-        String date_of_birth = scanner.nextLine();
+        String dateOfBirth = scanner.nextLine();
 
-        user_service.addUser(first_name, last_name, user_name, date_of_birth);
+        user_service.addUser(firstName, lastName, userName, dateOfBirth);
 
     }
 
@@ -90,20 +90,20 @@ public class UserView {
 
     private void getUserOfUsername() throws RandomException {
         System.out.println("Enter user's username");
-        String user_name = scanner.nextLine();
-        user_service.returnUserOfUserName(user_name);
+        String userName = scanner.nextLine();
+        user_service.returnUserOfUserName(userName);
     }
 
     private void updateUserOfUsername() throws ParseException, RandomException {
         System.out.println("Enter user's username");
-        String user_name = scanner.nextLine();
-        user_service.updateUserOfUserName(user_name);
+        String userName = scanner.nextLine();
+        user_service.updateUserOfUserName(userName);
 
     }
     private void deleteUserOfUsername() throws RandomException {
         System.out.println("Enter user's username you wish to delete");
-        String user_name = scanner.nextLine();
-        user_service.deleteUserOfUserName(user_name);
+        String userName = scanner.nextLine();
+        user_service.deleteUserOfUserName(userName);
     }
 
     private void deleteAllUsers() throws RandomException {
@@ -116,6 +116,4 @@ public class UserView {
     public static void Print(String print_out){
         System.out.println(print_out);
     }
-
-
 }
