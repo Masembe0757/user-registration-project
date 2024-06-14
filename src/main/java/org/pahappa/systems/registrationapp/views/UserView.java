@@ -58,8 +58,6 @@ public class UserView {
             }catch (Exception e){
                 System.out.println("Invalid choice. Please try again.");
                 scanner.nextLine(); // Consume the newline character
-            }catch (RandomException m){
-                System.out.println(m.getMessage());
             }
 
         }
@@ -68,52 +66,52 @@ public class UserView {
 
     private void registerUser() {
 
-        System.out.println("Enter users first name (Digits not allowed in this field)");
+        System.out.println("Enter users first name (required , no digits or special characters)");
         String first_name = scanner.nextLine();
 
-        System.out.println("Enter users last name (Digits not allowed in this field)");
+        System.out.println("Enter users last name (optional , no digits or special characters)");
         String last_name = scanner.nextLine();
 
-        System.out.println("Enter users username, (Should not start with a digit, not less than 6 characters, not digits only)");
+        System.out.println("Enter users username, (required, should not start with a digit, not less than 6 characters, not consist digits only, no special characters)");
         String user_name = scanner.nextLine();
 
-        System.out.println("Enter users date of birth format yyyy-mm-dd ");
+        System.out.println("Enter users date of birth format yyyy-mm-dd (not beyond current date, right month of year, right day of month)");
         String date_of_birth = scanner.nextLine();
 
-        user_service.AddUser(first_name, last_name, user_name, date_of_birth);
+        user_service.addUser(first_name, last_name, user_name, date_of_birth);
 
     }
 
     private void displayAllUsers() throws RandomException {
-        user_service.ReturnAllUsers();
+        user_service.returnAllUsers();
     }
 
     private void getUserOfUsername() throws RandomException {
         System.out.println("Enter user's username");
         String user_name = scanner.nextLine();
-        user_service.ReturnUserOfUserName(user_name);
+        user_service.returnUserOfUserName(user_name);
     }
 
     private void updateUserOfUsername() throws ParseException, RandomException {
         System.out.println("Enter user's username");
         String user_name = scanner.nextLine();
-        user_service.UpdateUserOfUserName(user_name);
+        user_service.updateUserOfUserName(user_name);
 
     }
     private void deleteUserOfUsername() throws RandomException {
         System.out.println("Enter user's username you wish to delete");
         String user_name = scanner.nextLine();
-        user_service.DeleteUserOfUserName(user_name);
+        user_service.deleteUserOfUserName(user_name);
     }
 
     private void deleteAllUsers() throws RandomException {
-        user_service.DeleteAllUsers();
+        user_service.deleteAllUsers();
     }
 
     public String Scan(){
         return scanner.nextLine();
     }
-    public void Print(String print_out){
+    public static void Print(String print_out){
         System.out.println(print_out);
     }
 

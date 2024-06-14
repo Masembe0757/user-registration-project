@@ -5,11 +5,20 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.pahappa.systems.registrationapp.config.SessionConfiguration;
 import  org.pahappa.systems.registrationapp.models.User;
+import  org.pahappa.systems.registrationapp.views.UserView;
 import java.util.Date;
 import java.util.List;
 
 public class UserRegDao {
-    public static void SaveUser(User user){
+
+
+    public static Transaction getTransaction(){
+        SessionFactory sf = SessionConfiguration.getSessionFactory();
+        Session session = sf.openSession();
+        Transaction trs = session.beginTransaction();
+        return trs;
+    }
+    public static void saveUser(User user){
         try {
             SessionFactory sf = SessionConfiguration.getSessionFactory();
             Session session = sf.openSession();
@@ -19,69 +28,94 @@ public class UserRegDao {
             SessionConfiguration.shutdown();
         }
         catch (Exception e){
-            System.out.println(e.getMessage());
+            UserView.Print("Session to save not created successfully");
         }
-
     }
 
-    public  static List<User> ReturnAllUsers(){
+    public  static List<User> returnAllUsers(){
+        List<User> users = null;
+            try{
+                SessionFactory sf = SessionConfiguration.getSessionFactory();
+                Session session = sf.openSession();
+                Transaction trs = session.beginTransaction();
+                Query qry = session.createQuery("from User");
+                users = qry.list();
+                trs.commit();
+                SessionConfiguration.shutdown();
 
+            }
+            catch (Exception e){
+                UserView.Print("Session to return users not created successfully");
+            }
+                return users;
+    }
+    public  static User returnUser(String user_name){
+        User user = null;
+        try {
             SessionFactory sf = SessionConfiguration.getSessionFactory();
             Session session = sf.openSession();
             Transaction trs = session.beginTransaction();
-            Query qry = session.createQuery("from User");
-            List<User> users = qry.list();
+            Query qry = session.createQuery("from User where username = :user_name");
+            qry.setParameter("user_name", user_name);
+            user = (User) qry.uniqueResult();
             trs.commit();
             SessionConfiguration.shutdown();
-            return users;
+        }
+        catch (Exception e){
+            UserView.Print("Session to return a user not created successfully");
+        }
+            return user;
     }
-    public  static User ReturnUser(String user_name){
-        SessionFactory sf = SessionConfiguration.getSessionFactory();
-        Session session = sf.openSession();
-        Transaction trs = session.beginTransaction();
-        Query qry = session.createQuery("from User where username = :user_name");
-        qry.setParameter("user_name",user_name);
-        User user = (User) qry.uniqueResult();
-        trs.commit();
-        SessionConfiguration.shutdown();
-        return user;
-    }
-    public  static int DeleteUser(String user_name){
-        SessionFactory sf = SessionConfiguration.getSessionFactory();
-        Session session = sf.openSession();
-        Transaction trs = session.beginTransaction();
-        Query qry = session.createQuery("delete from User where username = :user_name");
-        qry.setParameter("user_name",user_name);
-        int result = qry.executeUpdate();
-        trs.commit();
-        SessionConfiguration.shutdown();
+    public  static int deleteUser(String user_name){
+        int result = -1;
+        try {
+            SessionFactory sf = SessionConfiguration.getSessionFactory();
+            Session session = sf.openSession();
+            Transaction trs = session.beginTransaction();
+            Query qry = session.createQuery("delete from User where username = :user_name");
+            qry.setParameter("user_name", user_name);
+            result = qry.executeUpdate();
+            trs.commit();
+            SessionConfiguration.shutdown();
+        }catch (Exception e){
+            UserView.Print("Session to delete a user not created successfully");
+        }
         return result;
-
     }
-    public  static int DeleteAllUsers(){
-        SessionFactory sf = SessionConfiguration.getSessionFactory();
-        Session session = sf.openSession();
-        Transaction trs = session.beginTransaction();
-        Query qry = session.createQuery("delete from User");
-        int result = qry.executeUpdate();
-        trs.commit();
-        SessionConfiguration.shutdown();
+    public  static int deleteAllUsers(){
+        int result = -1;
+        try {
+            SessionFactory sf = SessionConfiguration.getSessionFactory();
+            Session session = sf.openSession();
+            Transaction trs = session.beginTransaction();
+            Query qry = session.createQuery("delete from User");
+            result = qry.executeUpdate();
+            trs.commit();
+            SessionConfiguration.shutdown();
+        }
+        catch (Exception e){
+            UserView.Print("Session to delete users not created successfully");
+        }
         return  result;
-
     }
-    public  static int UpdateUser(String first_name, String last_name, String user_name, Date date_of_birth){
-        SessionFactory sf = SessionConfiguration.getSessionFactory();
-        Session session = sf.openSession();
-        Transaction trs = session.beginTransaction();
-        Query qry =session.createQuery("update User set firstname =:first_name , lastname = :last_name, dateOfBirth= :date_of_birth where username = :user_name");
-        qry.setParameter("user_name",user_name);
-        qry.setParameter("first_name",first_name);
-        qry.setParameter("last_name",last_name);
-        qry.setParameter("date_of_birth",date_of_birth);
-        int result = qry.executeUpdate();
-        trs.commit();
-        SessionConfiguration.shutdown();
+    public  static int updateUser(String first_name, String last_name, String user_name, Date date_of_birth){
+        int result = -1;
+        try {
+            SessionFactory sf = SessionConfiguration.getSessionFactory();
+            Session session = sf.openSession();
+            Transaction trs = session.beginTransaction();
+            Query qry = session.createQuery("update User set firstname =:first_name , lastname = :last_name, dateOfBirth= :date_of_birth where username = :user_name");
+            qry.setParameter("user_name", user_name);
+            qry.setParameter("first_name", first_name);
+            qry.setParameter("last_name", last_name);
+            qry.setParameter("date_of_birth", date_of_birth);
+            result = qry.executeUpdate();
+            trs.commit();
+            SessionConfiguration.shutdown();
+        }
+        catch (Exception e){
+            UserView.Print("Session to update a user not created successfully");
+        }
         return result;
-
     }
 }
