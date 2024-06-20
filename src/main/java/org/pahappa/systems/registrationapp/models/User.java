@@ -1,80 +1,42 @@
 package org.pahappa.systems.registrationapp.models;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import  java.util.*;
-
-import java.util.Date;
 import java.util.Objects;
+import javax.persistence.*;
 
-public class User {
+@Entity
+@Table(name = "user_table")
+public class User extends Account {
+    public User(){}
 
-    //public static final List<User> users_list = new ArrayList<>();
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
+    private List< Dependant> dependant = new ArrayList<>();
 
-    private String username;
-    private String firstname;
-    private String lastname;
-    private Date dateOfBirth;
-
-    public User(){
-
+    public List<Dependant> getDependant() {
+        return dependant;
     }
 
-    private User(String username, String firstname, String lastname, Date dateOfBirth){
-        this.username = username;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.dateOfBirth = dateOfBirth;
-    }
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    @Override
-    public String toString() {
-        return username;
+    public void setDependant(List<Dependant> dependant) {
+        this.dependant = dependant;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         User user = (User) o;
-        return Objects.equals(username, user.username) &&
-                Objects.equals(firstname, user.firstname) &&
-                Objects.equals(lastname, user.lastname) &&
-                Objects.equals(dateOfBirth, user.dateOfBirth);
+        return Objects.equals(dependant, user.dependant);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(username, firstname, lastname, dateOfBirth);
+        return Objects.hash(super.hashCode(), dependant);
     }
-
+    @Override
+    public String toString() {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        return "User : " + this.getUsername()+ " has  full name : " + this.getFirstname() + ' ' + this.getLastname() + ' ' + " and a date of birth : " + df.format(this.getDateOfBirth());
+    }
 }

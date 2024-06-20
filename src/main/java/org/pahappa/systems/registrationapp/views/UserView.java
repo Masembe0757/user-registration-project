@@ -1,9 +1,8 @@
 package org.pahappa.systems.registrationapp.views;
+import org.pahappa.systems.registrationapp.exception.RandomException;
 import  org.pahappa.systems.registrationapp.services.UserService;
-import java.text.DateFormat;
+
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
 
 public class UserView {
@@ -57,63 +56,64 @@ public class UserView {
                         System.out.println("Invalid choice. Please try again.");
                 }
             }catch (Exception e){
-                System.out.println("Invalid choice. Please try again.");
+                System.out.println("The following error has occurred " + e.getMessage());
                 scanner.nextLine(); // Consume the newline character
+            } catch (RandomException e) {
+                System.out.println(e.getMessage());
             }
+
         }
     }
 
 
     private void registerUser() {
 
-        System.out.println("Enter users first name (Digits not allowed in this field)");
-        String first_name = scanner.nextLine();
+        System.out.println("Enter users first name (required , no digits or special characters)");
+        String firstName = scanner.nextLine();
 
-        System.out.println("Enter users last name (Digits not allowed in this field)");
-        String last_name = scanner.nextLine();
+        System.out.println("Enter users last name (optional , no digits or special characters)");
+        String lastName = scanner.nextLine();
 
-        System.out.println("Enter users username, (Should not start with a digit, not less than 6 characters, not digits only)");
-        String user_name = scanner.nextLine();
+        System.out.println("Enter users username, (required, should not start with a digit, not less than 6 characters, not consist digits only, no special characters)");
+        String userName = scanner.nextLine();
 
-        System.out.println("Enter users date of birth format yyyy-mm-dd ");
-        String date_of_birth = scanner.nextLine();
+        System.out.println("Enter users date of birth format yyyy-mm-dd (not beyond current date, right month of year, right day of month)");
+        String dateOfBirth = scanner.nextLine();
 
-        user_service.addUser(first_name, last_name, user_name, date_of_birth);
+        user_service.addUser(firstName, lastName, userName, dateOfBirth);
 
     }
 
-    private void displayAllUsers() {
+    private void displayAllUsers() throws RandomException {
         user_service.returnAllUsers();
     }
 
-    private void getUserOfUsername(){
+    private void getUserOfUsername() throws RandomException, ParseException {
         System.out.println("Enter user's username");
-        String user_name = scanner.nextLine();
-        user_service.returnUserOfUserName(user_name);
+        String userName = scanner.nextLine();
+        UserService.returnUserOfUserName(userName);
     }
 
-    private void updateUserOfUsername() throws ParseException {
+    private void updateUserOfUsername() throws ParseException, RandomException {
         System.out.println("Enter user's username");
-        String user_name = scanner.nextLine();
-        user_service.updateUserOfUserName(user_name);
+        String userName = scanner.nextLine();
+        user_service.updateUserOfUserName(userName);
 
     }
-    private void deleteUserOfUsername() {
+    private void deleteUserOfUsername() throws RandomException {
         System.out.println("Enter user's username you wish to delete");
-        String user_name = scanner.nextLine();
-        user_service.deleteUserOfUserName(user_name);
+        String userName = scanner.nextLine();
+        user_service.deleteUserOfUserName(userName);
     }
 
-    private void deleteAllUsers() {
+    private void deleteAllUsers() throws RandomException {
         user_service.deleteAllUsers();
     }
 
     public String Scan(){
         return scanner.nextLine();
     }
-    public void Print(String print_out){
+    public static void Print(String print_out){
         System.out.println(print_out);
     }
-
-
 }
